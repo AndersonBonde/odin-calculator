@@ -2,28 +2,25 @@ console.log("Start");
 
 class Calculator {
     constructor() {
-
+        this.firstNumber = 0;
+        this.secondNumber = 0;
+        this.operand = "";
     }
 
-    add(a, b) {
-        return a + b;
+    methods = {
+        "+": (a, b) => a + b,
+        "-": (a, b) => a - b,
+        "*": (a, b) => a * b,
+        "/": (a, b) => a / b
     }
 
-    subtract(a, b) {
-        return a - b;
-    }
-
-    multiply(a, b) {
-        return a * b;
-    }
-
-    divide(a, b) {
-        return a / b;
+    operate(a, b, op) {
+        return this.methods[op](a, b);
     }
 }
 let calculator = new Calculator();
 
-console.log(calculator.add(3, 4));
-console.log(calculator.subtract(5, 2));
-console.log(calculator.multiply(2, 5));
-console.log(calculator.divide(10, 4));
+console.log(calculator.operate(3, 4, "+"));
+console.log(calculator.operate(8, 4, "-"));
+console.log(calculator.operate(3, 5, "*"));
+console.log(calculator.operate(12, 4, "/"));

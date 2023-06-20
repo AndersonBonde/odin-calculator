@@ -1,10 +1,13 @@
-console.log("Start");
+const calculatorDisplay = document.querySelector(".display");
+const numberButtons = document.querySelectorAll(".number");
+const clearButton = document.querySelector(".clear");
 
 class Calculator {
     constructor() {
-        this.firstNumber = 0;
-        this.secondNumber = 0;
-        this.operand = "";
+        this.firstValue = "";
+        this.secondValue = "";
+        this.operator = "";
+        this.display = "";
     }
 
     methods = {
@@ -17,10 +20,23 @@ class Calculator {
     operate(a, b, op) {
         return this.methods[op](a, b);
     }
-}
-let calculator = new Calculator();
 
-console.log(calculator.operate(3, 4, "+"));
-console.log(calculator.operate(8, 4, "-"));
-console.log(calculator.operate(3, 5, "*"));
-console.log(calculator.operate(12, 4, "/"));
+    append(e) {
+        let number = e.target.textContent;
+        this.display = calculatorDisplay.textContent + number;
+
+        calculatorDisplay.textContent = this.display;
+    }
+
+    clear() {
+        this.display = "";
+        calculatorDisplay.textContent = this.display;
+    }
+}
+let calculator = new Calculator(calculatorDisplay);
+
+numberButtons.forEach(curr => {
+    curr.addEventListener("click", calculator.append);
+})
+
+clearButton.addEventListener("click", calculator.clear);

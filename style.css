@@ -34,7 +34,7 @@ body {
 }
 
 .empty {
-    flex: 2;
+    flex: 1;
 }
 
 button {
@@ -46,8 +46,4 @@ button {
     font-size: 2.5rem;
     cursor: pointer;
     box-shadow: 1px 1px black;
-}
-
-.clear {
-    flex: 2;
 }

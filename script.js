@@ -4,6 +4,7 @@ const clearButton = document.querySelector(".clear");
 const operatorButtons = document.querySelectorAll(".operator");
 const resultButton = document.querySelector(".result");
 const decimalButton = document.querySelector(".decimal");
+const clearLastButton = document.querySelector(".clearLast");
 
 class Calculator {
     constructor() {
@@ -16,6 +17,7 @@ class Calculator {
         this.append = this.append.bind(this);
         this.clear = this.clear.bind(this);
         this.result = this.result.bind(this);
+        this.clearLast = this.clearLast.bind(this);
     }
 
     methods = {
@@ -126,6 +128,11 @@ class Calculator {
 
         calculatorDisplay.textContent = this.display;
     }
+
+    clearLast() {
+        this.display = this.display.slice(0, -1);
+        calculatorDisplay.textContent = this.display;
+    }
 }
 let calculator = new Calculator(calculatorDisplay);
 
@@ -142,3 +149,5 @@ operatorButtons.forEach(curr => {
 resultButton.addEventListener("click", calculator.result);
 
 decimalButton.addEventListener("click", calculator.append);
+
+clearLastButton.addEventListener("click", calculator.clearLast);

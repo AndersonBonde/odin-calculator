@@ -32,25 +32,32 @@ class Calculator {
     append(e) {
         let character = e.target.textContent;
 
-        if(this.firstValue == "") {
-            let first = this.display.split(" ")[0];
-
-            if(first == "" && character == ".") calculatorDisplay.textContent = 0;
-            
-            if(Number.isInteger(+first)) {
-                this.display = calculatorDisplay.textContent + character;
+        if(character == ".") {
+            if(this.firstValue == "") {
+                let first = this.display.split(" ")[0];
+    
+                if(first == "") calculatorDisplay.textContent = 0;
+                
+                if(Number.isInteger(+first)) {
+                    this.display = calculatorDisplay.textContent + character;
+                    this.firstValue = this.display;
+                }
+            } else if(this.secondValue == "") {
+                let second = this.display.split(" ")[2];
+                
+                if(second == "") calculatorDisplay.textContent += 0;
+    
+                if(Number.isInteger(+second)) {
+                    this.display = calculatorDisplay.textContent + character;
+                    this.secondValue = this.display.split(" ")[2];
+                }
             }
-        } else {
-            let second = this.display.split(" ")[2];
+            calculatorDisplay.textContent = this.display;
 
-            if(second == "" && character == ".") calculatorDisplay.textContent += 0;
-
-            if(Number.isInteger(+second)) {
-                this.display = calculatorDisplay.textContent + character;
-            }
+            return;
         }
-        // this.display = calculatorDisplay.textContent + character;
-
+        
+        this.display = calculatorDisplay.textContent + character;    
         calculatorDisplay.textContent = this.display;
     }
 

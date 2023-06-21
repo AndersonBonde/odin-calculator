@@ -28,6 +28,13 @@ class Calculator {
         return this.methods[op](a, b);
     }
 
+    append(e) {
+        let number = e.target.textContent;
+        this.display = calculatorDisplay.textContent + number;
+
+        calculatorDisplay.textContent = this.display;
+    }
+
     process(e) {
         let op = e.target.textContent;
         
@@ -41,6 +48,8 @@ class Calculator {
             let first = +this.firstValue;
             let second = +this.display.split(" ")[2];
 
+            if(second == "") return;
+
             let result = this.operate(first, second, this.operator);
 
             this.firstValue = result;
@@ -52,26 +61,11 @@ class Calculator {
         }
     }
 
-    append(e) {
-        let number = e.target.textContent;
-        this.display = calculatorDisplay.textContent + number;
-
-        calculatorDisplay.textContent = this.display;
-    }
-
-    clear() {
-        this.display = "";
-        this.firstValue = "";
-        this.secondValue = "";
-        this.operator = "";
-
-        calculatorDisplay.textContent = this.display;
-    }
-
     result() {
         if(this.firstValue == "") return;
 
         this.secondValue = this.display.split(" ")[2];
+        if(this.secondValue == "") return;
 
         let result = this.operate(+this.firstValue, +this.secondValue, this.operator);
         if(result % 1 != 0) {
@@ -85,6 +79,15 @@ class Calculator {
         this.firstValue = result;
         this.secondValue = "";
         this.operator = "";
+    }
+
+    clear() {
+        this.display = "";
+        this.firstValue = "";
+        this.secondValue = "";
+        this.operator = "";
+
+        calculatorDisplay.textContent = this.display;
     }
 }
 let calculator = new Calculator(calculatorDisplay);

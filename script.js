@@ -35,7 +35,7 @@ class Calculator {
         let character = e.target.textContent;
 
         if(character == ".") {
-            if(this.firstValue == "") {
+            if(!this.firstValue.includes(".")) {
                 let first = this.display.split(" ")[0];
     
                 if(first == "") calculatorDisplay.textContent = 0;
@@ -44,7 +44,7 @@ class Calculator {
                     this.display = calculatorDisplay.textContent + character;
                     this.firstValue = this.display;
                 }
-            } else if(this.secondValue == "") {
+            } else if(!this.secondValue.includes(".")) {
                 let second = this.display.split(" ")[2];
                 
                 if(second == "") calculatorDisplay.textContent += 0;
@@ -108,7 +108,7 @@ class Calculator {
 
         let result = this.operate(+this.firstValue, +this.secondValue, this.operator);
         if(result % 1 != 0) {
-            this.display = `${result.toFixed(4)}`;
+            this.display = `${+result.toFixed(4)}`;
             calculatorDisplay.textContent = this.display;
         } else {
             this.display = `${result}`;
@@ -132,6 +132,22 @@ class Calculator {
     clearLast() {
         this.display = this.display.slice(0, -1);
         calculatorDisplay.textContent = this.display;
+
+        let values = this.display.split(" ");
+
+        switch(values.length) {
+            case 3:
+                this.secondValue = values[2].slice(0, -1);
+                break;
+            case 2:
+                this.operator = "";
+                this.display = values[0];
+                calculatorDisplay.textContent = this.display;
+                break;
+            case 1:
+                this.firstValue = values[0].slice(0, -1);
+                break;
+        }
     }
 }
 let calculator = new Calculator(calculatorDisplay);

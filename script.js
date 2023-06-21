@@ -35,10 +35,13 @@ class Calculator {
         let character = e.target.textContent;
 
         if(character == ".") {
-            if(!this.firstValue.includes(".")) {
+            if(this.firstValue == "" && !this.firstValue.includes(".")) {
                 let first = this.display.split(" ")[0];
     
-                if(first == "") calculatorDisplay.textContent = 0;
+                if(first == "") {
+                    this.display = 0;
+                    calculatorDisplay.textContent = this.display;
+                }
                 
                 if(Number.isInteger(+first)) {
                     this.display = calculatorDisplay.textContent + character;
@@ -47,7 +50,10 @@ class Calculator {
             } else if(!this.secondValue.includes(".")) {
                 let second = this.display.split(" ")[2];
                 
-                if(second == "") calculatorDisplay.textContent += 0;
+                if(second == "") {
+                    this.display += 0;
+                    calculatorDisplay.textContent = this.display;
+                }
     
                 if(Number.isInteger(+second)) {
                     this.display = calculatorDisplay.textContent + character;
@@ -111,7 +117,7 @@ class Calculator {
             this.display = `${+result.toFixed(4)}`;
             calculatorDisplay.textContent = this.display;
         } else {
-            this.display = `${result}`;
+            this.display = `${+result}`;
             calculatorDisplay.textContent = this.display;
         }     
 

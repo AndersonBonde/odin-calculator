@@ -30,23 +30,25 @@ class Calculator {
 
     process(e) {
         let op = e.target.textContent;
-        this.operator = op;
+        
+        if(this.firstValue == "" || this.operator == "") {
+            this.operator = op;
+            this.firstValue = this.display.split(" ")[0];
 
-        if(this.firstValue == "") {
-            this.firstValue = this.display;
-            
-            this.display = "";
-            calculatorDisplay.textContent = "";
-            console.log(`First value: ${this.firstValue}, Operator: ${this.operator}`);
+            this.display = `${this.firstValue} ${this.operator} `;
+            calculatorDisplay.textContent = this.display;
         } else {
             let first = +this.firstValue;
-            let second = +this.display;
+            let second = +this.display.split(" ")[2];
 
-            this.firstValue = this.operate(first, second, op);
+            let result = this.operate(first, second, this.operator);
 
-            this.display = "";
-            calculatorDisplay.textContent = "";
-            console.log(`First value: ${this.firstValue}, Operator: ${this.operator}`);
+            this.firstValue = result;
+
+            this.display = `${this.firstValue} ${op} `;
+            this.operator = op;
+
+            calculatorDisplay.textContent = this.display;
         }
     }
 
@@ -69,14 +71,20 @@ class Calculator {
     result() {
         if(this.firstValue == "") return;
 
-        this.secondValue = this.display;
+        this.secondValue = this.display.split(" ")[2];
 
         let result = this.operate(+this.firstValue, +this.secondValue, this.operator);
         if(result % 1 != 0) {
-            calculatorDisplay.textContent = result.toFixed(4);
+            this.display = `${result.toFixed(4)}`;
+            calculatorDisplay.textContent = this.display;
         } else {
-            calculatorDisplay.textContent = result;
+            this.display = `${result}`;
+            calculatorDisplay.textContent = this.display;
         }     
+
+        this.firstValue = result;
+        this.secondValue = "";
+        this.operator = "";
     }
 }
 let calculator = new Calculator(calculatorDisplay);

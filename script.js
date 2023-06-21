@@ -3,6 +3,7 @@ const numberButtons = document.querySelectorAll(".number");
 const clearButton = document.querySelector(".clear");
 const operatorButtons = document.querySelectorAll(".operator");
 const resultButton = document.querySelector(".result");
+const decimalButton = document.querySelector(".decimal");
 
 class Calculator {
     constructor() {
@@ -29,8 +30,26 @@ class Calculator {
     }
 
     append(e) {
-        let number = e.target.textContent;
-        this.display = calculatorDisplay.textContent + number;
+        let character = e.target.textContent;
+
+        if(this.firstValue == "") {
+            let first = this.display.split(" ")[0];
+
+            if(first == "" && character == ".") calculatorDisplay.textContent = 0;
+            
+            if(Number.isInteger(+first)) {
+                this.display = calculatorDisplay.textContent + character;
+            }
+        } else {
+            let second = this.display.split(" ")[2];
+
+            if(second == "" && character == ".") calculatorDisplay.textContent += 0;
+
+            if(Number.isInteger(+second)) {
+                this.display = calculatorDisplay.textContent + character;
+            }
+        }
+        // this.display = calculatorDisplay.textContent + character;
 
         calculatorDisplay.textContent = this.display;
     }
@@ -114,3 +133,5 @@ operatorButtons.forEach(curr => {
 })
 
 resultButton.addEventListener("click", calculator.result);
+
+decimalButton.addEventListener("click", calculator.append);

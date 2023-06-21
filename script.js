@@ -48,7 +48,12 @@ class Calculator {
             let first = +this.firstValue;
             let second = +this.display.split(" ")[2];
 
-            if(second == "") return;
+            if(second === "") return;
+            if(second == 0 && this.operator == "/") {
+                this.display = "Error";
+                calculatorDisplay.textContent = this.display;
+                return;
+            }
 
             let result = this.operate(first, second, this.operator);
 
@@ -66,6 +71,12 @@ class Calculator {
 
         this.secondValue = this.display.split(" ")[2];
         if(this.secondValue == "") return;
+
+        if(this.secondValue == 0 && this.operator == "/") {
+            this.display = "Error";
+            calculatorDisplay.textContent = this.display;
+            return;
+        }
 
         let result = this.operate(+this.firstValue, +this.secondValue, this.operator);
         if(result % 1 != 0) {

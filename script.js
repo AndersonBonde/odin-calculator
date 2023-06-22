@@ -35,128 +35,95 @@ class Calculator {
         let character = char == undefined ? e.target.textContent : char;
 
         if(character == ".") {
-            if(this.firstValue == "" && !this.firstValue.includes(".")) {
-                let first = this.display.split(" ")[0];
-    
-                if(first == "") {
-                    this.display = 0;
-                    calculatorDisplay.textContent = this.display;
-                }
-                
-                if(Number.isInteger(+first)) {
-                    this.display = calculatorDisplay.textContent + character;
-                    this.firstValue = this.display;
-                }
-            } else if(!this.secondValue.includes(".")) {
-                let second = this.display.split(" ")[2];
-                
-                if(second == "") {
-                    this.display += 0;
-                    calculatorDisplay.textContent = this.display;
-                }
-    
-                if(Number.isInteger(+second)) {
-                    this.display = calculatorDisplay.textContent + character;
-                    this.secondValue = this.display.split(" ")[2];
-                }
-            }
-            calculatorDisplay.textContent = this.display;
-
-            return;
+            this.appendDecimal();
+        } else {
+            this.display = calculatorDisplay.textContent + character;    
         }
-        
-        this.display = calculatorDisplay.textContent + character;    
-        calculatorDisplay.textContent = this.display;
+
+        this.update();
+    }
+
+    appendDecimal() {
+        if(this.operator == "") {
+            if(!this.firstValue.includes(".")) {
+                this.display = calculatorDisplay.textContent + ".";
+            }
+        } else {
+            if(!this.secondValue.includes(".")) {
+                this.display = calculatorDisplay.textContent + ".";
+            }
+        }
     }
 
     process(e, char) {
         let op = char == undefined ? e.target.textContent : char;
         
-        if(this.firstValue == "" || this.operator == "") {
+        if(this.operator == "") {
             this.operator = op;
-            this.firstValue = this.display.split(" ")[0];
 
             this.display = `${this.firstValue} ${this.operator} `;
-            calculatorDisplay.textContent = this.display;
         } else {
-            let first = +this.firstValue;
-            let second = +this.display.split(" ")[2];
+            if(this.secondValue == "") return;
+            if(this.checkForDivisionByZero()) return;
 
-            if(second === "") return;
-            if(second == 0 && this.operator == "/") {
-                this.display = "Error";
-                calculatorDisplay.textContent = this.display;
-                return;
-            }
-
-            let result = this.operate(first, second, this.operator);
+            let result = this.operate(+this.firstValue, +this.secondValue, this.operator);
 
             this.firstValue = result;
-
-            this.display = `${this.firstValue} ${op} `;
             this.operator = op;
 
-            calculatorDisplay.textContent = this.display;
+            this.display = `${this.firstValue} ${op} `;
         }
+
+        this.update();
     }
 
     result() {
-        if(this.firstValue == "") return;
-
-        this.secondValue = this.display.split(" ")[2];
-        if(this.secondValue == "") return;
-
-        if(this.secondValue == 0 && this.operator == "/") {
-            this.display = "Error";
-            calculatorDisplay.textContent = this.display;
-            return;
-        }
+        if(this.firstValue == "" || this.secondValue == "") return;
+        if(this.checkForDivisionByZero()) return;
 
         let result = this.operate(+this.firstValue, +this.secondValue, this.operator);
-        if(result % 1 != 0) {
-            this.display = `${+result.toFixed(4)}`;
-            calculatorDisplay.textContent = this.display;
-        } else {
-            this.display = `${+result}`;
-            calculatorDisplay.textContent = this.display;
-        }     
+
+        this.display = `${+result.toFixed(4)}`;
 
         this.firstValue = result;
         this.secondValue = "";
         this.operator = "";
+
+        this.update();
+    }
+
+    checkForDivisionByZero() {
+        if(this.secondValue == 0 && this.operator == "/") {
+            this.display = "Error";
+            calculatorDisplay.textContent = this.display;
+            return true;
+        }        
     }
 
     clear() {
         this.display = "";
-        this.firstValue = "";
-        this.secondValue = "";
-        this.operator = "";
-
-        calculatorDisplay.textContent = this.display;
+        this.update();
     }
 
     clearLast() {
+        this.display = this.display.trimEnd();
         this.display = this.display.slice(0, -1);
-        calculatorDisplay.textContent = this.display;
 
+        this.update();
+    }
+
+    update() {
         let values = this.display.split(" ");
 
-        switch(values.length) {
-            case 3:
-                this.secondValue = values[2].slice(0, -1);
-                break;
-            case 2:
-                this.operator = "";
-                this.display = values[0];
-                calculatorDisplay.textContent = this.display;
-                break;
-            case 1:
-                this.firstValue = values[0].slice(0, -1);
-                break;
-        }
+        if(values.length == 3) this.secondValue = values[2];
+        if(values.length == 2) this.operator = values[1];
+        
+        this.firstValue = values[0];
+
+        calculatorDisplay.textContent = this.display;
     }
 }
-let calculator = new Calculator(calculatorDisplay);
+let calculator = new Calculator();
 
 numberButtons.forEach(curr => {
     curr.addEventListener("click", calculator.append);
@@ -174,6 +141,7 @@ decimalButton.addEventListener("click", calculator.append);
 
 clearLastButton.addEventListener("click", calculator.clearLast);
 
+// Add keyboard input functionality;
 document.addEventListener("keydown", (e) => {
     numberButtons.forEach(curr => {
         if(curr.dataset.code == e.code) {

@@ -24,6 +24,8 @@ body {
     border-radius: 8px;
     text-align: right;
     font-size: 2rem;
+    word-wrap: break-word;
+    word-break: break-all;
 }
 
 .buttonsLine {

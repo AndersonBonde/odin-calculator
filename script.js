@@ -31,8 +31,8 @@ class Calculator {
         return this.methods[op](a, b);
     }
 
-    append(e) {
-        let character = e.target.textContent;
+    append(e, char) {
+        let character = char == undefined ? e.target.textContent : char;
 
         if(character == ".") {
             if(this.firstValue == "" && !this.firstValue.includes(".")) {
@@ -69,8 +69,8 @@ class Calculator {
         calculatorDisplay.textContent = this.display;
     }
 
-    process(e) {
-        let op = e.target.textContent;
+    process(e, char) {
+        let op = char == undefined ? e.target.textContent : char;
         
         if(this.firstValue == "" || this.operator == "") {
             this.operator = op;
@@ -173,3 +173,32 @@ resultButton.addEventListener("click", calculator.result);
 decimalButton.addEventListener("click", calculator.append);
 
 clearLastButton.addEventListener("click", calculator.clearLast);
+
+document.addEventListener("keydown", (e) => {
+    numberButtons.forEach(curr => {
+        if(curr.dataset.code == e.code) {
+            calculator.append(e, curr.textContent);
+        }
+    })
+
+    operatorButtons.forEach(curr => {
+        if(curr.dataset.code == e.code) {
+            calculator.process(e, curr.textContent);
+        }
+    })
+
+    switch(e.code) {
+        case resultButton.dataset.code:
+            calculator.result();
+            break;
+        case clearButton.dataset.code:
+            calculator.clear();
+            break;
+        case clearLastButton.dataset.code:
+            calculator.clearLast();
+            break;
+        case decimalButton.dataset.code:
+            calculator.append(e, ".");
+            break;
+    }
+})
